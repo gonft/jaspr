@@ -39,6 +39,7 @@ dev_dependencies:
 dependency_overrides:
   dds: ^5.1.0
   vm_service: ^15.0.0
+  pointycastle: ^4.0.0
 
 melos:
   command:

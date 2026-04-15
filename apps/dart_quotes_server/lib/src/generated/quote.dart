@@ -25,7 +25,7 @@ abstract class Quote implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? id,
     required String quote,
     required String author,
-    required List<int> likes,
+    required List<String> likes,
   }) = _QuoteImpl;
 
   factory Quote.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -33,7 +33,9 @@ abstract class Quote implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       id: jsonSerialization['id'] as int?,
       quote: jsonSerialization['quote'] as String,
       author: jsonSerialization['author'] as String,
-      likes: _i2.Protocol().deserialize<List<int>>(jsonSerialization['likes']),
+      likes: _i2.Protocol().deserialize<List<String>>(
+        jsonSerialization['likes'],
+      ),
     );
   }
 
@@ -48,7 +50,7 @@ abstract class Quote implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   String author;
 
-  List<int> likes;
+  List<String> likes;
 
   @override
   _i1.Table<int?> get table => t;
@@ -60,7 +62,7 @@ abstract class Quote implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? id,
     String? quote,
     String? author,
-    List<int>? likes,
+    List<String>? likes,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -121,7 +123,7 @@ class _QuoteImpl extends Quote {
     int? id,
     required String quote,
     required String author,
-    required List<int> likes,
+    required List<String> likes,
   }) : super._(
          id: id,
          quote: quote,
@@ -137,7 +139,7 @@ class _QuoteImpl extends Quote {
     Object? id = _Undefined,
     String? quote,
     String? author,
-    List<int>? likes,
+    List<String>? likes,
   }) {
     return Quote(
       id: id is int? ? id : this.id,
@@ -161,10 +163,11 @@ class QuoteUpdateTable extends _i1.UpdateTable<QuoteTable> {
     value,
   );
 
-  _i1.ColumnValue<List<int>, List<int>> likes(List<int> value) => _i1.ColumnValue(
-    table.likes,
-    value,
-  );
+  _i1.ColumnValue<List<String>, List<String>> likes(List<String> value) =>
+      _i1.ColumnValue(
+        table.likes,
+        value,
+      );
 }
 
 class QuoteTable extends _i1.Table<int?> {
@@ -178,7 +181,7 @@ class QuoteTable extends _i1.Table<int?> {
       'author',
       this,
     );
-    likes = _i1.ColumnSerializable<List<int>>(
+    likes = _i1.ColumnSerializable<List<String>>(
       'likes',
       this,
     );
@@ -190,7 +193,7 @@ class QuoteTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString author;
 
-  late final _i1.ColumnSerializable<List<int>> likes;
+  late final _i1.ColumnSerializable<List<String>> likes;
 
   @override
   List<_i1.Column> get columns => [
@@ -257,7 +260,7 @@ class QuoteRepository {
   /// );
   /// ```
   Future<List<Quote>> find(
-    _i1.Session session, {
+    _i1.DatabaseSession session, {
     _i1.WhereExpressionBuilder<QuoteTable>? where,
     int? limit,
     int? offset,
@@ -265,6 +268,8 @@ class QuoteRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<QuoteTable>? orderByList,
     _i1.Transaction? transaction,
+    _i1.LockMode? lockMode,
+    _i1.LockBehavior? lockBehavior,
   }) async {
     return session.db.find<Quote>(
       where: where?.call(Quote.t),
@@ -274,6 +279,8 @@ class QuoteRepository {
       limit: limit,
       offset: offset,
       transaction: transaction,
+      lockMode: lockMode,
+      lockBehavior: lockBehavior,
     );
   }
 
@@ -295,13 +302,15 @@ class QuoteRepository {
   /// );
   /// ```
   Future<Quote?> findFirstRow(
-    _i1.Session session, {
+    _i1.DatabaseSession session, {
     _i1.WhereExpressionBuilder<QuoteTable>? where,
     int? offset,
     _i1.OrderByBuilder<QuoteTable>? orderBy,
     bool orderDescending = false,
     _i1.OrderByListBuilder<QuoteTable>? orderByList,
     _i1.Transaction? transaction,
+    _i1.LockMode? lockMode,
+    _i1.LockBehavior? lockBehavior,
   }) async {
     return session.db.findFirstRow<Quote>(
       where: where?.call(Quote.t),
@@ -310,18 +319,24 @@ class QuoteRepository {
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
+      lockMode: lockMode,
+      lockBehavior: lockBehavior,
     );
   }
 
   /// Finds a single [Quote] by its [id] or null if no such row exists.
   Future<Quote?> findById(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     int id, {
     _i1.Transaction? transaction,
+    _i1.LockMode? lockMode,
+    _i1.LockBehavior? lockBehavior,
   }) async {
     return session.db.findById<Quote>(
       id,
       transaction: transaction,
+      lockMode: lockMode,
+      lockBehavior: lockBehavior,
     );
   }
 
@@ -331,14 +346,20 @@ class QuoteRepository {
   ///
   /// This is an atomic operation, meaning that if one of the rows fails to
   /// insert, none of the rows will be inserted.
+  ///
+  /// If [ignoreConflicts] is set to `true`, rows that conflict with existing
+  /// rows are silently skipped, and only the successfully inserted rows are
+  /// returned.
   Future<List<Quote>> insert(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     List<Quote> rows, {
     _i1.Transaction? transaction,
+    bool ignoreConflicts = false,
   }) async {
     return session.db.insert<Quote>(
       rows,
       transaction: transaction,
+      ignoreConflicts: ignoreConflicts,
     );
   }
 
@@ -346,7 +367,7 @@ class QuoteRepository {
   ///
   /// The returned [Quote] will have its `id` field set.
   Future<Quote> insertRow(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     Quote row, {
     _i1.Transaction? transaction,
   }) async {
@@ -362,7 +383,7 @@ class QuoteRepository {
   /// This is an atomic operation, meaning that if one of the rows fails to
   /// update, none of the rows will be updated.
   Future<List<Quote>> update(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     List<Quote> rows, {
     _i1.ColumnSelections<QuoteTable>? columns,
     _i1.Transaction? transaction,
@@ -378,7 +399,7 @@ class QuoteRepository {
   /// Optionally, a list of [columns] can be provided to only update those
   /// columns. Defaults to all columns.
   Future<Quote> updateRow(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     Quote row, {
     _i1.ColumnSelections<QuoteTable>? columns,
     _i1.Transaction? transaction,
@@ -393,7 +414,7 @@ class QuoteRepository {
   /// Updates a single [Quote] by its [id] with the specified [columnValues].
   /// Returns the updated row or null if no row with the given id exists.
   Future<Quote?> updateById(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     int id, {
     required _i1.ColumnValueListBuilder<QuoteUpdateTable> columnValues,
     _i1.Transaction? transaction,
@@ -408,7 +429,7 @@ class QuoteRepository {
   /// Updates all [Quote]s matching the [where] expression with the specified [columnValues].
   /// Returns the list of updated rows.
   Future<List<Quote>> updateWhere(
-    _i1.Session session, {
+    _i1.DatabaseSession session, {
     required _i1.ColumnValueListBuilder<QuoteUpdateTable> columnValues,
     required _i1.WhereExpressionBuilder<QuoteTable> where,
     int? limit,
@@ -434,7 +455,7 @@ class QuoteRepository {
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
   Future<List<Quote>> delete(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     List<Quote> rows, {
     _i1.Transaction? transaction,
   }) async {
@@ -446,7 +467,7 @@ class QuoteRepository {
 
   /// Deletes a single [Quote].
   Future<Quote> deleteRow(
-    _i1.Session session,
+    _i1.DatabaseSession session,
     Quote row, {
     _i1.Transaction? transaction,
   }) async {
@@ -458,7 +479,7 @@ class QuoteRepository {
 
   /// Deletes all rows matching the [where] expression.
   Future<List<Quote>> deleteWhere(
-    _i1.Session session, {
+    _i1.DatabaseSession session, {
     required _i1.WhereExpressionBuilder<QuoteTable> where,
     _i1.Transaction? transaction,
   }) async {
@@ -471,7 +492,7 @@ class QuoteRepository {
   /// Counts the number of rows matching the [where] expression. If omitted,
   /// will return the count of all rows in the table.
   Future<int> count(
-    _i1.Session session, {
+    _i1.DatabaseSession session, {
     _i1.WhereExpressionBuilder<QuoteTable>? where,
     int? limit,
     _i1.Transaction? transaction,
@@ -479,6 +500,22 @@ class QuoteRepository {
     return session.db.count<Quote>(
       where: where?.call(Quote.t),
       limit: limit,
+      transaction: transaction,
+    );
+  }
+
+  /// Acquires row-level locks on [Quote] rows matching the [where] expression.
+  Future<void> lockRows(
+    _i1.DatabaseSession session, {
+    required _i1.WhereExpressionBuilder<QuoteTable> where,
+    required _i1.LockMode lockMode,
+    required _i1.Transaction transaction,
+    _i1.LockBehavior lockBehavior = _i1.LockBehavior.wait,
+  }) async {
+    return session.db.lockRows<Quote>(
+      where: where(Quote.t),
+      lockMode: lockMode,
+      lockBehavior: lockBehavior,
       transaction: transaction,
     );
   }

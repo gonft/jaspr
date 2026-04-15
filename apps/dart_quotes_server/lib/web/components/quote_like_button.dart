@@ -28,10 +28,9 @@ class QuoteLikeButton extends StatefulComponent {
 }
 
 class QuoteLikeButtonState extends State<QuoteLikeButton> {
-  late final ClientOrStubbed client = Client(
-    'http://localhost:8080/',
-    authenticationKeyManager: FlutterAuthenticationKeyManager(),
-  );
+  late final ClientOrStubbed client = Client('http://localhost:8080/')
+    ..authKeyProvider = FlutterAuthenticationKeyManager()
+    ..connectivityMonitor = JasprConnectivityMonitor();
   late SessionManagerOrStubbed sessionManager;
 
   StreamSubscription? subscription;
@@ -51,8 +50,6 @@ class QuoteLikeButtonState extends State<QuoteLikeButton> {
   }
 
   Future<void> initStateWeb() async {
-    client.connectivityMonitor = JasprConnectivityMonitor();
-
     // The session manager keeps track of the signed-in state of the user. You
     // can query it to see if the user is currently signed in and get information
     // about the user.
@@ -62,7 +59,7 @@ class QuoteLikeButtonState extends State<QuoteLikeButton> {
     subscription = client.quotes.subscribeToQuote(component.id).listen((quote) {
       setState(() {
         count = quote.likes.length;
-        hasLiked = sessionManager.isSignedIn && quote.likes.contains(sessionManager.signedInUser?.id);
+        hasLiked = sessionManager.isSignedIn && quote.likes.contains(sessionManager.signedInUser?.userIdentifier);
       });
     });
   }

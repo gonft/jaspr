@@ -23,6 +23,9 @@ abstract class JasprRoute extends Route {
   /// Override this method to build your root [Component] from the current [session] and [request].
   Future<Component> build(Session session, Request request);
 
+  @override
+  void injectIn(RelicRouter router) => router.any('/', call);
+
   Future<shelf.Response> _handleRenderCall(
     shelf.Request request,
     FutureOr<shelf.Response> Function(Component) render,

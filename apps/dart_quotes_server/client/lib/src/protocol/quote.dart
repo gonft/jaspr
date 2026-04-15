@@ -25,7 +25,7 @@ abstract class Quote implements _i1.SerializableModel {
     int? id,
     required String quote,
     required String author,
-    required List<int> likes,
+    required List<String> likes,
   }) = _QuoteImpl;
 
   factory Quote.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -33,7 +33,9 @@ abstract class Quote implements _i1.SerializableModel {
       id: jsonSerialization['id'] as int?,
       quote: jsonSerialization['quote'] as String,
       author: jsonSerialization['author'] as String,
-      likes: _i2.Protocol().deserialize<List<int>>(jsonSerialization['likes']),
+      likes: _i2.Protocol().deserialize<List<String>>(
+        jsonSerialization['likes'],
+      ),
     );
   }
 
@@ -46,7 +48,7 @@ abstract class Quote implements _i1.SerializableModel {
 
   String author;
 
-  List<int> likes;
+  List<String> likes;
 
   /// Returns a shallow copy of this [Quote]
   /// with some or all fields replaced by the given arguments.
@@ -55,7 +57,7 @@ abstract class Quote implements _i1.SerializableModel {
     int? id,
     String? quote,
     String? author,
-    List<int>? likes,
+    List<String>? likes,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -81,7 +83,7 @@ class _QuoteImpl extends Quote {
     int? id,
     required String quote,
     required String author,
-    required List<int> likes,
+    required List<String> likes,
   }) : super._(
          id: id,
          quote: quote,
@@ -97,7 +99,7 @@ class _QuoteImpl extends Quote {
     Object? id = _Undefined,
     String? quote,
     String? author,
-    List<int>? likes,
+    List<String>? likes,
   }) {
     return Quote(
       id: id is int? ? id : this.id,

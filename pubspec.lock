@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  cbor:
+    dependency: transitive
+    description:
+      name: cbor
+      sha256: "2c5c37650f0a2d25149f03e748ab7b2857787bde338f95fe947738b80d713da2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.1"
   characters:
     dependency: transitive
     description:
@@ -871,6 +879,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.5"
+  hex:
+    dependency: transitive
+    description:
+      name: hex
+      sha256: "4e7cd54e4b59ba026432a6be2dd9d96e4c5205725194997193bf871703b82c4a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   highlight:
     dependency: transitive
     description:
@@ -1287,6 +1303,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  passkeys_server:
+    dependency: transitive
+    description:
+      name: passkeys_server
+      sha256: "0173c533b0c0a9fb92a7a215f1b77432ec48c504f3de9fa0221dc6ab50718f98"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -1376,13 +1400,13 @@ packages:
     source: hosted
     version: "2.1.8"
   pointycastle:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: pointycastle
-      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
+      sha256: "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.1"
+    version: "4.0.0"
   pool:
     dependency: transitive
     description:
@@ -1551,11 +1575,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.0-beta.3"
+  serverpod_auth_core_server:
+    dependency: transitive
+    description:
+      name: serverpod_auth_core_server
+      sha256: "37b77674aa6ca93e120174dd364f781836c6f1ba8ff7956efa3b47adb55b4402"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.0-beta.3"
   serverpod_auth_google_flutter:
     dependency: transitive
     description:
       name: serverpod_auth_google_flutter
       sha256: "086be27de577431c018972f174d8791fdeade8128f6eb3189c8447eb668900f0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.0-beta.3"
+  serverpod_auth_idp_server:
+    dependency: transitive
+    description:
+      name: serverpod_auth_idp_server
+      sha256: c350292ff6b9cb76926d7ff96fb63b69cecbe31013ee61d3d9a6436f996ebce8
       url: "https://pub.dev"
     source: hosted
     version: "3.5.0-beta.3"
@@ -1727,6 +1767,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  sign_in_with_apple_server:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_server
+      sha256: b431982c88e8649aecb5a17678082cb8045d70eebca8555acb1d1b561d4756b9
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

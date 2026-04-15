@@ -16,10 +16,7 @@ class QuotesService {
   static Future<Quote?> toggleLikeOnQuote(Session session, int id, bool liked) async {
     final userInfo = session.authenticated;
     if (userInfo == null) return null;
-    // Serverpod 3.0 changed userId to userIdentifier (String).
-    // Parse to int for compatibility with existing likes data model.
-    final userId = int.tryParse(userInfo.userIdentifier);
-    if (userId == null) return null;
+    final userId = userInfo.userIdentifier;
 
     var quote = await getQuoteById(session, id);
     if (quote == null) return null;

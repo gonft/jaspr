@@ -12,9 +12,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'quote.dart' as _i4;
-import 'quote_init.dart' as _i5;
+import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+    as _i3;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i4;
+import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
+    as _i5;
+import 'quote.dart' as _i6;
+import 'quote_init.dart' as _i7;
 export 'quote.dart';
 export 'quote_init.dart';
 
@@ -55,7 +59,7 @@ class Protocol extends _i1.SerializationManagerServer {
           name: 'likes',
           columnType: _i2.ColumnType.json,
           isNullable: false,
-          dartType: 'List<int>',
+          dartType: 'List<String>',
         ),
       ],
       foreignKeys: [],
@@ -77,6 +81,8 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     ..._i3.Protocol.targetTableDefinitions,
+    ..._i4.Protocol.targetTableDefinitions,
+    ..._i5.Protocol.targetTableDefinitions,
     ..._i2.Protocol.targetTableDefinitions,
   ];
 
@@ -107,23 +113,29 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
 
-    if (t == _i4.Quote) {
-      return _i4.Quote.fromJson(data) as T;
+    if (t == _i6.Quote) {
+      return _i6.Quote.fromJson(data) as T;
     }
-    if (t == _i5.QuoteInit) {
-      return _i5.QuoteInit.fromJson(data) as T;
+    if (t == _i7.QuoteInit) {
+      return _i7.QuoteInit.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Quote?>()) {
-      return (data != null ? _i4.Quote.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Quote?>()) {
+      return (data != null ? _i6.Quote.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.QuoteInit?>()) {
-      return (data != null ? _i5.QuoteInit.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.QuoteInit?>()) {
+      return (data != null ? _i7.QuoteInit.fromJson(data) : null) as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
+    try {
+      return _i4.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
+    try {
+      return _i5.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -133,8 +145,8 @@ class Protocol extends _i1.SerializationManagerServer {
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
-      _i4.Quote => 'Quote',
-      _i5.QuoteInit => 'QuoteInit',
+      _i6.Quote => 'Quote',
+      _i7.QuoteInit => 'QuoteInit',
       _ => null,
     };
   }
@@ -149,9 +161,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
 
     switch (data) {
-      case _i4.Quote():
+      case _i6.Quote():
         return 'Quote';
-      case _i5.QuoteInit():
+      case _i7.QuoteInit():
         return 'QuoteInit';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -160,7 +172,15 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     className = _i3.Protocol().getClassNameForObject(data);
     if (className != null) {
+      return 'serverpod_auth_idp.$className';
+    }
+    className = _i4.Protocol().getClassNameForObject(data);
+    if (className != null) {
       return 'serverpod_auth.$className';
+    }
+    className = _i5.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth_core.$className';
     }
     return null;
   }
@@ -172,18 +192,26 @@ class Protocol extends _i1.SerializationManagerServer {
       return super.deserializeByClassName(data);
     }
     if (dataClassName == 'Quote') {
-      return deserialize<_i4.Quote>(data['data']);
+      return deserialize<_i6.Quote>(data['data']);
     }
     if (dataClassName == 'QuoteInit') {
-      return deserialize<_i5.QuoteInit>(data['data']);
+      return deserialize<_i7.QuoteInit>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
       return _i2.Protocol().deserializeByClassName(data);
     }
+    if (dataClassName.startsWith('serverpod_auth_idp.')) {
+      data['className'] = dataClassName.substring(19);
+      return _i3.Protocol().deserializeByClassName(data);
+    }
     if (dataClassName.startsWith('serverpod_auth.')) {
       data['className'] = dataClassName.substring(15);
-      return _i3.Protocol().deserializeByClassName(data);
+      return _i4.Protocol().deserializeByClassName(data);
+    }
+    if (dataClassName.startsWith('serverpod_auth_core.')) {
+      data['className'] = dataClassName.substring(20);
+      return _i5.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
@@ -197,21 +225,55 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     {
+      var table = _i4.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
+    }
+    {
+      var table = _i5.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
+    }
+    {
       var table = _i2.Protocol().getTableForType(t);
       if (table != null) {
         return table;
       }
     }
     switch (t) {
-      case _i4.Quote:
-        return _i4.Quote.t;
+      case _i6.Quote:
+        return _i6.Quote.t;
     }
     return null;
   }
 
   @override
-  List<_i2.TableDefinition> getTargetTableDefinitions() => targetTableDefinitions;
+  List<_i2.TableDefinition> getTargetTableDefinitions() =>
+      targetTableDefinitions;
 
   @override
   String getModuleName() => 'dart_quotes';
+
+  /// Maps any `Record`s known to this [Protocol] to their JSON representation
+  ///
+  /// Throws in case the record type is not known.
+  ///
+  /// This method will return `null` (only) for `null` inputs.
+  Map<String, dynamic>? mapRecordToJson(Record? record) {
+    if (record == null) {
+      return null;
+    }
+    try {
+      return _i3.Protocol().mapRecordToJson(record);
+    } catch (_) {}
+    try {
+      return _i4.Protocol().mapRecordToJson(record);
+    } catch (_) {}
+    try {
+      return _i5.Protocol().mapRecordToJson(record);
+    } catch (_) {}
+    throw Exception('Unsupported record type ${record.runtimeType}');
+  }
 }

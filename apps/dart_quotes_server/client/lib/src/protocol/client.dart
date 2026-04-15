@@ -13,8 +13,12 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:dart_quotes_client/src/protocol/quote.dart' as _i3;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+    as _i4;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
+import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
+    as _i6;
+import 'protocol.dart' as _i7;
 
 /// {@category Endpoint}
 class EndpointQuotes extends _i1.EndpointRef {
@@ -46,10 +50,16 @@ class EndpointQuotes extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i4.Caller(client);
+    serverpod_auth_idp = _i4.Caller(client);
+    auth = _i5.Caller(client);
+    serverpod_auth_core = _i6.Caller(client);
   }
 
-  late final _i4.Caller auth;
+  late final _i4.Caller serverpod_auth_idp;
+
+  late final _i5.Caller auth;
+
+  late final _i6.Caller serverpod_auth_core;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -72,13 +82,14 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i5.Protocol(),
+         _i7.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,
          onFailedCall: onFailedCall,
          onSucceededCall: onSucceededCall,
-         disconnectStreamsOnLostInternetConnection: disconnectStreamsOnLostInternetConnection,
+         disconnectStreamsOnLostInternetConnection:
+             disconnectStreamsOnLostInternetConnection,
        ) {
     quotes = EndpointQuotes(this);
     modules = Modules(this);
@@ -93,6 +104,8 @@ class Client extends _i1.ServerpodClientShared {
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {
+    'serverpod_auth_idp': modules.serverpod_auth_idp,
     'auth': modules.auth,
+    'serverpod_auth_core': modules.serverpod_auth_core,
   };
 }
