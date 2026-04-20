@@ -19,8 +19,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  jaspr:
-    path: ../jaspr
+  jaspr: 0.23.0
   serverpod: ^3.2.2
   serverpod_client: ^3.2.2
   shelf: ^1.4.0
