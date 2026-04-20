@@ -8,6 +8,10 @@
   (you will need to `hide Request` from the `package:jaspr/server.dart` import)
   and change route path to `/**` (was `/*`)
 
+## 0.6.1
+
+- `jaspr` upgraded to `0.23.0`
+
 ## 0.6.0
 
 - `jaspr` upgraded to `0.22.0`
